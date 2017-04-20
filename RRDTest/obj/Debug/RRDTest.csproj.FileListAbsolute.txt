@@ -1,0 +1,6 @@
+c:\users\mchernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\bin\Debug\RRDTest.exe.config
+C:\Users\MChernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\bin\Debug\RRDTest.exe
+C:\Users\MChernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\bin\Debug\RRDTest.pdb
+C:\Users\MChernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\obj\Debug\RRDTest.csprojResolveAssemblyReference.cache
+C:\Users\MChernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\obj\Debug\RRDTest.exe
+C:\Users\MChernetska\documents\visual studio 2015\Projects\RRDTest\RRDTest\obj\Debug\RRDTest.pdb
