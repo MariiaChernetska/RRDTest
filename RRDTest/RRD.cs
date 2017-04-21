@@ -65,9 +65,31 @@ namespace RRDTest
                         
                 }
             }
-            this.StartProcess(arguments);
+            StartProcess(arguments);
         }
-      
+
+        public void UpdateRRD(UpdateParameters upParams)
+        {
+            string arguments = "update " + upParams.FileName;
+            foreach (InsertPair pair in upParams.Pairs)
+            {
+                arguments += " " + pair.TimeStamp + ":" + pair.Value;
+            }
+            StartProcess(arguments);
+        }
+        public void DrawGraph(GraphParameters gp)
+        {
+            string arguments = "graph " + gp.ImageFileName;
+            arguments += " --start " + gp.TimeStart + " --end " + gp.TimeEnd;
+            foreach (GraphItem gi in gp.Items)
+            {
+                arguments += " DEF:" + gi.VarName + "=" + gi.DEF.RRDName + ":" + gi.DEF.RRDField + ":" + gi.DEF.CFType;
+                arguments += " LINE" + gi.Line.LineWidth + ":" + gi.VarName + gi.Line.Color;
+            }
+
+            StartProcess(arguments);
+        }
+       
     }
     public class CreationParameters
     {
@@ -134,5 +156,109 @@ namespace RRDTest
         MIN,
         MAX,
         LAST
+    }
+
+    public class UpdateParameters
+    {
+        public string FileName { get; }
+        public List<InsertPair> Pairs { get; }
+        public UpdateParameters(string fileName){
+            FileName = fileName;
+            Pairs = new List<InsertPair>();
+        }
+
+}
+    public class InsertPair
+    {
+        public string TimeStamp { get; }
+        public string Value { get; }
+
+        
+        public InsertPair(int value, DateTime time)
+        {
+            Value = value.ToString();
+            TimeStamp = TimeStampConverter.ConvertToTimestamp(time).ToString();
+        }
+        public InsertPair(int value, string time)
+        {
+            Value = value.ToString();
+            TimeStamp = time;
+        }
+        public InsertPair(int value)
+        {
+            Value = value.ToString();
+            TimeStamp = "N"; 
+        }
+    }
+    public class GraphParameters
+    {
+        public string ImageFileName { get; }
+        public string TimeStart { get; }
+        public string TimeEnd { get; }
+        public List<GraphItem> Items { get; }
+
+        public GraphParameters(string image, string timeStart, string timeEnd)
+        {
+            ImageFileName = image;
+            TimeStart = timeStart;
+            TimeEnd = timeEnd;
+            Items = new List<GraphItem>();
+        }
+        public GraphParameters(string image, DateTime timeStart, DateTime timeEnd)
+        {
+            ImageFileName = image;
+            TimeStart = TimeStampConverter.ConvertToTimestamp(timeStart).ToString();
+            TimeEnd = TimeStampConverter.ConvertToTimestamp(timeStart).ToString();
+            Items = new List<GraphItem>();
+        }
+    }
+    public class GraphItem
+    {
+        public string VarName { get; }
+        public GraphDEF DEF { get; }
+        public GraphLine Line { get; }
+        public GraphItem(string varName, GraphDEF def, GraphLine line)
+        {
+            VarName = varName;
+            DEF = def;
+            Line = line;
+        }
+    }
+    public class GraphDEF
+    {
+
+        public string RRDName { get; }
+        public string RRDField { get; }
+        public CFTypes CFType { get; }
+        public GraphDEF(string rrdName, string rrdField, CFTypes cfType)
+        {
+            RRDName = rrdName;
+            RRDField = rrdField;
+            CFType = cfType;
+        }
+    }
+    public class GraphLine
+    {
+        public int LineWidth { get; }
+        public string Color { get; }
+        public GraphLine(int lineWidth, string color)
+        {
+            LineWidth = lineWidth;
+            Color = color;
+        }
+    }
+
+
+
+
+    public class TimeStampConverter
+    {
+        public static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public static long ConvertToTimestamp(DateTime value)
+        {
+            TimeSpan elapsedTime = value - Epoch;
+            return (long)elapsedTime.TotalSeconds;
+        }
     }
 }

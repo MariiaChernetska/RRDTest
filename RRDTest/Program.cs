@@ -13,16 +13,29 @@ namespace RRDTest
         
         static void Main(string[] args)
         {
-            
-
             try
             {
                 RRD myprocess = new RRD();
-                CreationParameters cp = new CreationParameters("test18.rrd", 0, 920804400);
-                DS d = new DS("speed", DSTypes.COUNTER, 600, "U", "U");
-                cp.DSs.Add(d);
-                cp.RRAs.Add(new RRA(CFTypes.AVERAGE, 0.5, 1, 24));
-                myprocess.CreateRRD(cp);
+                //CreationParameters cp = new CreationParameters("test19.rrd", 0, 920804400);
+                //DS d = new DS("speed", DSTypes.COUNTER, 600, "U", "U");
+                //cp.DSs.Add(d);
+                //cp.RRAs.Add(new RRA(CFTypes.AVERAGE, 0.5, 1, 24));
+                //cp.RRAs.Add(new RRA(CFTypes.AVERAGE, 0.5, 6, 10));
+                //myprocess.CreateRRD(cp);
+                //UpdateParameters up = new UpdateParameters("test19.rrd");
+                //up.Pairs.Add(new InsertPair(12363, "920805600"));
+                //up.Pairs.Add(new InsertPair(12363, "920805900"));
+                //up.Pairs.Add(new InsertPair(12373, "920806200"));
+                //myprocess.UpdateRRD(up);
+                GraphParameters gp = new GraphParameters("speed.png", "920804400", "920808000");
+                
+                GraphDEF def = new GraphDEF("test19.rrd", "speed", CFTypes.AVERAGE);
+                GraphLine line = new GraphLine(2, "#0000FF");
+                GraphItem gi = new GraphItem("myspeed", def, line);
+                gp.Items.Add(gi);
+                myprocess.DrawGraph(gp);
+
+
 
             }
             catch (Exception ex)
